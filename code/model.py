@@ -137,25 +137,23 @@ class RNN_ENCODER(nn.Module):
         #
         # Returns: a PackedSequence object
         cap_lens = cap_lens.data.tolist()
-        emb = pack_padded_sequence(emb, cap_lens, batch_first=True)
+        emb_pack = pack_padded_sequence(emb, cap_lens, batch_first=True)
         # #hidden and memory (num_layers * num_directions, batch, hidden_size):
         # tensor containing the initial hidden state for each element in batch.
         # #output (batch, seq_len, hidden_size * num_directions)
         # #or a PackedSequence object:
         # tensor containing output features (h_t) from the last layer of RNN
-        output, hidden = self.rnn(emb, hidden)
+        output, hidden = self.rnn(emb_pack, hidden)
         # PackedSequence object
         # --> (batch, seq_len, hidden_size * num_directions)
         output = pad_packed_sequence(output, batch_first=True)[0]
         # output = self.drop(output)
         # --> batch x hidden_size*num_directions x seq_len
         words_emb = output.transpose(1, 2)
+        emb = emb.view(-1, emb.size()[1] * emb.size()[2])
         # --> batch x num_directions*hidden_size
-        if self.rnn_type == 'LSTM':
-            sent_emb = hidden[0].transpose(0, 1).contiguous()
-        else:
-            sent_emb = hidden.transpose(0, 1).contiguous()
-        sent_emb = sent_emb.view(-1, self.nhidden * self.num_directions)
+        sent_emb = nn.Linear(emb.size()[1],
+                             self.nhidden * self.num_directions)(emb)
         return words_emb, sent_emb
 
 
