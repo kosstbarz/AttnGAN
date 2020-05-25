@@ -1,10 +1,11 @@
-# AttnGAN
+# AttnGAN with noise reduction
 
-Pytorch implementation for reproducing AttnGAN results in the paper [AttnGAN: Fine-Grained Text to Image Generation
-with Attentional Generative Adversarial Networks](http://openaccess.thecvf.com/content_cvpr_2018/papers/Xu_AttnGAN_Fine-Grained_Text_CVPR_2018_paper.pdf) by Tao Xu, Pengchuan Zhang, Qiuyuan Huang, Han Zhang, Zhe Gan, Xiaolei Huang, Xiaodong He. (This work was performed when Tao was an intern with Microsoft Research). 
+Pytorch model based on AttnGAN described in paper [AttnGAN: Fine-Grained Text to Image Generation
+with Attentional Generative Adversarial Networks](http://openaccess.thecvf.com/content_cvpr_2018/papers/Xu_AttnGAN_Fine-Grained_Text_CVPR_2018_paper.pdf) with noise-reducing encoding from paper [A Generative Adversarial Approach for Zero-Shot Learning from Noisy Texts](http://openaccess.thecvf.com/content_cvpr_2018/papers/Zhu_A_Generative_Adversarial_CVPR_2018_paper.pdf)
 
-<img src="framework.png" width="900px" height="350px"/>
-
+The idea of noise reduction is based on FC layer on raw embeddings. But we lose information about each separate word.
+So I decided to use this idea to part of Text Encoder, which produce sentence features.
+Instead of taking hidden state, I apply FC to raw embeddings and return result as sentence features.
 
 ### Dependencies
 python 2.7
