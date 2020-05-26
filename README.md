@@ -5,7 +5,10 @@ with Attentional Generative Adversarial Networks](http://openaccess.thecvf.com/c
 
 The idea of noise reduction is based on FC layer on raw embeddings. But we lose information about each separate word.
 So I decided to use this idea to part of Text Encoder, which produce sentence features.
-Instead of taking hidden state, I apply FC to raw embeddings and return result as sentence features.
+In the original paper sentence features are concatenated hidden states from both directions of LSTM.
+I propose FC layer to reduce dimensions and get noise resistant representation of sentence features.
+This approach should be more noise resistant because in LSTM noise in first word affect all hidden states.
+All other blocks are the same as in original paper.
 
 ### Dependencies
 python 2.7
